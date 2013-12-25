@@ -29,6 +29,10 @@ public class Stat implements CommandExecutor {
 						Msg.getNoPermissions().replace("{%Permission%}",
 								"Kills.OwnStats"), sender);
 		} else {
+			if (!sender.hasPermission("Kills.OtherStats"))
+				return Utils.fixAndSend(
+						Msg.getNoPermissions().replace("{%Permission%}",
+								"Kills.OtherStats"), sender);
 			LocalPlayer p = null;
 			if (Cfg.isLoadedPlayer(args[0]))
 				p = Cfg.getPlayer(args[0].toLowerCase());
