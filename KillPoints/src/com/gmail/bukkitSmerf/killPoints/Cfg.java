@@ -5,8 +5,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.HashMap;
-import java.util.Map;
 
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.InvalidConfigurationException;
@@ -14,42 +12,17 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 public class Cfg {
-	private static Map<String, LocalPlayer> players = new HashMap<String, LocalPlayer>();
+
 	private static boolean useMySQL;
 	private static String mySQLUser, mySQLDb, mySQLPass, mySQLHost;
 	private static long startingPoints;
-	private static int negativeWhen, minPercentage, maxPercentage,
-			percentageToGetNegative, minPoints, maxPoints,
-			percentageToGetNegative2, minPoints2, maxPoints2,
-			loseMinPercentage, loseMaxPercentage;
-
-	public static void addPlayer(LocalPlayer player) {
-		players.put(player.getName().toLowerCase(), player);
-	}
-
-	public static LocalPlayer getPlayer(String name) {
-		if (players.containsKey(name.toLowerCase()))
-			return players.get(name.toLowerCase());
-		return null;
-	}
-
-	public static boolean isLoadedPlayer(String name) {
-		if (players.containsKey(name.toLowerCase()))
-			return true;
-		return false;
-	}
-
-	public static void removePlayer(String name) {
-		if (players.containsKey(name.toLowerCase())){
-			players.remove(name.toLowerCase());
-		}
-	}
+	private static int negativeWhen, minPercentage, maxPercentage, percentageToGetNegative, minPoints, maxPoints, percentageToGetNegative2,
+			minPoints2, maxPoints2, loseMinPercentage, loseMaxPercentage;
 
 	public Cfg() {
 		try {
 			Utils.log("&b Loading Config.yml...");
-			File configFile = new File(KillPoints.getPluginDataFolder(),
-					"config.yml");
+			File configFile = new File(KillPoints.getPluginDataFolder(), "config.yml");
 			if (!configFile.exists()) {
 				Utils.warn("&b I don't see any config file... Creating new one.");
 				configFile.getParentFile().mkdirs();
@@ -59,13 +32,11 @@ public class Cfg {
 			}
 			FileConfiguration config = new YamlConfiguration();
 			config.load(configFile);
-			ConfigurationSection section = config
-					.getConfigurationSection("General");
+			ConfigurationSection section = config.getConfigurationSection("General");
 			useMySQL = section.getBoolean("UseMySQL", false);
 			if (useMySQL) {
 				Utils.log("&b MySQL enabled, starting connection.");
-				ConfigurationSection mySQL = section
-						.getConfigurationSection("MySQL");
+				ConfigurationSection mySQL = section.getConfigurationSection("MySQL");
 				mySQLUser = mySQL.getString("User");
 				mySQLDb = mySQL.getString("Db");
 				mySQLPass = mySQL.getString("Pass");
@@ -78,8 +49,7 @@ public class Cfg {
 			minPercentage = section.getInt("MinPercentage");
 			maxPercentage = section.getInt("MaxPercentage");
 			percentageToGetNegative = section.getInt("PercentageToGetNegative");
-			percentageToGetNegative2 = section
-					.getInt("PercentageToGetNegative2");
+			percentageToGetNegative2 = section.getInt("PercentageToGetNegative2");
 			minPoints = section.getInt("MinPoints");
 			maxPoints = section.getInt("MaxPoints");
 			minPoints2 = section.getInt("MinPoints2");

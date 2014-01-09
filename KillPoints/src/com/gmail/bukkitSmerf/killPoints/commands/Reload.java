@@ -12,16 +12,17 @@ import com.gmail.bukkitSmerf.killPoints.Utils;
 public class Reload implements CommandExecutor {
 
 	@Override
-	public boolean onCommand(CommandSender sender, Command cmd, String label,
-			String[] args) {
+	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 		if (sender.hasPermission("Kills.Reload")) {
-			Db.savePlayers();
-			new Cfg();
-			Db.loadPlayers();
+			if (args.length > 0 && args[0].equalsIgnoreCase("-f")) {
+				Db.clear();
+			} else {
+				Db.savePlayers();
+				new Cfg();
+				Db.loadPlayers();
+			}
 		} else
-			return Utils.fixAndSend(
-					Msg.getNoPermissions().replace("{%Permission%}",
-							"Kills.Reload"), sender);
+			return Utils.fixAndSend(Msg.getNoPermissions().replace("{%Permission%}", "Kills.Reload"), sender);
 		return Utils.fixAndSend("&aReload complete.", sender);
 	}
 }
