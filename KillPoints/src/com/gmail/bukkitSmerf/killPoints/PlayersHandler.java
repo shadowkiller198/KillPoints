@@ -16,11 +16,11 @@ public class PlayersHandler {
 	}
 
 	public static boolean isLoaded(String player) {
-		return players.containsKey(player.toLowerCase());
+		return players.containsKey(player);
 	}
 
 	public static LocalPlayer getPlayer(String player) {
-		return players.get(player.toLowerCase());
+		return players.get(player);
 	}
 
 	public static LocalPlayer tempLoadPlayer(String player) {
@@ -35,26 +35,32 @@ public class PlayersHandler {
 	}
 
 	public static void sendPlayer(LocalPlayer player) {
-		players.put(player.getName().toLowerCase(), player);
+		players.put(player.getName(), player);
 	}
 
 	public static void loadPlayers() {
-		for (Player player : Bukkit.getOnlinePlayers())
-			players.put(player.getName().toLowerCase(), Db.loadPlayer(player.getName()));
+		for (Player p : Bukkit.getOnlinePlayers())
+			if (!isLoaded(p.getName()))
+				loadPlayer(p.getName());
+	}
+
+	public static void reLoadPlayers() {
+		unloadPlayers();
+		loadPlayers();
 	}
 
 	public static void loadPlayer(String player) {
-		players.put(player.toLowerCase(), Db.loadPlayer(player));
+		players.put(player, Db.loadPlayer(player));
 	}
 
 	public static void unloadPlayer(String player) {
-		Db.savePlayer(players.get(player.toLowerCase()));
-		players.remove(player.toLowerCase());
+		Db.savePlayer(players.get(player));
+		players.remove(player);
 	}
 
 	public static void unloadPlayers() {
 		for (Player player : Bukkit.getOnlinePlayers())
-			Db.savePlayer(players.get(player.getName().toLowerCase()));
+			Db.savePlayer(players.get(player.getName()));
 		players.clear();
 	}
 

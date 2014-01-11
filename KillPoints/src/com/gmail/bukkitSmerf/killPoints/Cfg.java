@@ -5,19 +5,46 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.HashMap;
+import java.util.Map;
 
+import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.EntityType;
+import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 
 public class Cfg {
 
-	private static boolean useMySQL;
+	private static boolean useMySQL, aSyncAutoSave;
 	private static String mySQLUser, mySQLDb, mySQLPass, mySQLHost;
-	private static long startingPoints;
+	private static long startingPoints, autoSave;
 	private static int negativeWhen, minPercentage, maxPercentage, percentageToGetNegative, minPoints, maxPoints, percentageToGetNegative2,
 			minPoints2, maxPoints2, loseMinPercentage, loseMaxPercentage;
+	private static Map<String, DmgCfg> dmgCfgs = new HashMap<String, DmgCfg>();
+
+	public static DmgCfg getDmgCfg(String string) {
+		return dmgCfgs.get(string);
+	}
+
+	public class DmgCfg {
+
+		public final int losePercentage, loseMinPercentage, loseMaxPercentage;
+		public final double multi;
+		public final boolean deathMsgEnabled;
+		public final String deathMsg;
+
+		DmgCfg(int losePercentage, int loseMinPercentage, int loseMaxPercentage, double multi, boolean deathMsgEnabled, String deathMsg) {
+			this.losePercentage = losePercentage;
+			this.loseMinPercentage = loseMinPercentage;
+			this.loseMaxPercentage = loseMaxPercentage;
+			this.multi = multi;
+			this.deathMsgEnabled = deathMsgEnabled;
+			this.deathMsg = deathMsg;
+		}
+	}
 
 	public Cfg() {
 		try {
@@ -44,6 +71,10 @@ public class Cfg {
 			}
 			Db.connectToDatabase();
 			startingPoints = section.getLong("StartingPoints");
+			autoSave = section.getInt("AutoSave", -1);
+			if (autoSave > 0)
+				autoSave *= 1200;
+			aSyncAutoSave = section.getBoolean("aSyncAutoSave", false);
 			section = config.getConfigurationSection("Kills");
 			negativeWhen = section.getInt("NegativeWhen");
 			minPercentage = section.getInt("MinPercentage");
@@ -56,8 +87,29 @@ public class Cfg {
 			maxPoints2 = section.getInt("MaxPoints2");
 			loseMinPercentage = section.getInt("LoseMinPercentage");
 			loseMaxPercentage = section.getInt("LoseMaxPercentage");
+			if (!section.isConfigurationSection("Deaths")) {
+				for (int i = 0; i < 10; i++)
+					Utils.warn("&4 Error when trying load config file! Update you config to 1.2!!\n http://pastebin.com/Ysap6wGm");
+				Bukkit.shutdown();
+				return;
+			}
+			section = section.getConfigurationSection("Deaths");
+			for (DamageCause dc : DamageCause.values()) {
+				String dmgc = dc.toString();
+				if (!dc.equals(DamageCause.ENTITY_ATTACK) && section.isConfigurationSection(dmgc)) {
+					ConfigurationSection dmgSection = section.getConfigurationSection(dmgc);
+					dmgCfgs.put(dmgc, new DmgCfg(dmgSection.getInt("LosePercentage"), dmgSection.getInt("LoseMinPercentage"), dmgSection.getInt("LoseMaxPercentage"), dmgSection.getDouble("Multi"), dmgSection.getBoolean("DeathMsgEnabled"), dmgSection.getString("DeathMsg")));
+				}
+			}
+			for (EntityType et : EntityType.values()) {
+				String entt = et.toString();
+				if (section.isConfigurationSection(entt)) {
+					ConfigurationSection dmgSection = section.getConfigurationSection(entt);
+					dmgCfgs.put(entt, new DmgCfg(dmgSection.getInt("LosePercentage"), dmgSection.getInt("LoseMinPercentage"), dmgSection.getInt("LoseMaxPercentage"), dmgSection.getDouble("Multi"), dmgSection.getBoolean("DeathMsgEnabled"), dmgSection.getString("DeathMsg")));
+				}
+			}
 			new Msg(config.getConfigurationSection("Messages"));
-			Db.loadPlayers();
+			PlayersHandler.loadPlayers();
 			Utils.log("&b Loaded config file.");
 		} catch (IOException | InvalidConfigurationException e) {
 			e.printStackTrace();
@@ -132,6 +184,14 @@ public class Cfg {
 
 	public static int getLoseMaxPercentage() {
 		return loseMaxPercentage;
+	}
+
+	public static long getAutoSave() {
+		return autoSave;
+	}
+
+	public static boolean isaSyncAutoSave() {
+		return aSyncAutoSave;
 	}
 
 	public static void copy(InputStream in, File file) {

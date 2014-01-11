@@ -75,11 +75,6 @@ public class Db {
 		}
 	}
 
-	public static void loadPlayers() {
-		for (Player p : Bukkit.getOnlinePlayers())
-			loadPlayer(p.getName());
-	}
-
 	public static void createPlayer(String player) {
 		update("INSERT INTO bukkitsmerf (player, kills, deaths, kd, points) VALUES ('" + player + "', 0, 0, 0, " + Cfg.getStartingPoints() + ");");
 	}
@@ -104,7 +99,7 @@ public class Db {
 	}
 
 	public static void savePlayer(LocalPlayer player) {
-		update("UPDATE bukkitsmerf SET kills=" + player.kills + ", deaths=" + player.deaths + ", kd=" + player.getKD() + ", points=" + player.points + " WHERE player='" + player.playerName + "'");
+		update("UPDATE bukkitsmerf SET kills=" + player.kills + ", deaths=" + player.deaths + ", kd=" + player.getKD() + ", points=" + player.points + " WHERE player LIKE '" + player.playerName + "'");
 	}
 
 	public static boolean isPlayer(String playerName) {
@@ -137,7 +132,6 @@ public class Db {
 
 	private static List<LocalPlayer> getTop(String col, int from) {
 		try {
-			savePlayers();
 			ArrayList<LocalPlayer> top = new ArrayList<LocalPlayer>();
 			ResultSet result = query("SELECT player FROM bukkitsmerf ORDER BY " + col + " " + "DESC LIMIT " + (from - 1) + ",10");
 			ArrayList<String> players = new ArrayList<String>();

@@ -6,6 +6,10 @@ General:
     Pass: null
     Host: null
   StartingPoints: 1000
+# After every X minutes all players will be saved to DataBase set to 0 or -1 to disable.
+  AutoSave: -1
+# save in ASync. WARNING: not tested, possible errors!
+  aSyncAutoSave: false
 Kills:
 # Jesli zabity ma wiecej punktow niz zabijajacy to losowy procent z roznicy tej liczby zostanie dodany do konta zabijajacego.
 # If killed have more points than killer then random % of (KilledPoints - KillerPoints) is added to killer.
@@ -29,6 +33,373 @@ Kills:
   MinPoints2: 5
   MaxPoints2: 25
   PercentageToGetNegative2: 20
+  
+# Podczas smierci z innego powodu pewien % punktów może zostać zabrany.
+# When player die from other causes than being killed by player, some % of points can be removed.
+  Deaths:
+    BLOCK_EXPLOSION:
+# % to lose points. If you set this to -1 then player don't lose points and plugin don't add death to player stat.
+      LosePercentage: 100
+# from 0 - 99 (only Integer)
+      LoseMinPercentage: 1
+# from 1 - 100 (only Integer) must be bigger than LoseMinPercentage
+      LoseMaxPercentage: 5
+# Points to remove will be multiplied by this number, so you can set it to eg: 0.1 to get more control.
+      Multi: 1
+# You can set own death message If you enable it. See bukkit page for help.
+      DeathMsgEnabled: false
+      DeathMsg: ""
+    CONTACT:
+      LosePercentage: 100
+      LoseMinPercentage: 1
+      LoseMaxPercentage: 5
+      Multi: 1
+      DeathMsgEnabled: false
+      DeathMsg: ""
+    DROWNING:
+      LosePercentage: 100
+      LoseMinPercentage: 1
+      LoseMaxPercentage: 5
+      Multi: 1
+      DeathMsgEnabled: false
+      DeathMsg: ""
+    ENTITY_ATTACK:
+      BAT:
+        LosePercentage: 100
+        LoseMinPercentage: 1
+        LoseMaxPercentage: 5
+        Multi: 1
+        DeathMsgEnabled: false
+        DeathMsg: ""
+      BLAZE:
+        LosePercentage: 100
+        LoseMinPercentage: 1
+        LoseMaxPercentage: 5
+        Multi: 1
+        DeathMsgEnabled: false
+        DeathMsg: ""
+      CAVE_SPIDER:
+        LosePercentage: 100
+        LoseMinPercentage: 1
+        LoseMaxPercentage: 5
+        Multi: 1
+        DeathMsgEnabled: false
+        DeathMsg: ""
+      CHICKEN:
+        LosePercentage: 100
+        LoseMinPercentage: 1
+        LoseMaxPercentage: 5
+        Multi: 1
+        DeathMsgEnabled: false
+        DeathMsg: ""
+      COW:
+        LosePercentage: 100
+        LoseMinPercentage: 1
+        LoseMaxPercentage: 5
+        Multi: 1
+        DeathMsgEnabled: false
+        DeathMsg: ""
+      CREEPER:
+        LosePercentage: 100
+        LoseMinPercentage: 1
+        LoseMaxPercentage: 5
+        Multi: 1
+        DeathMsgEnabled: false
+        DeathMsg: ""
+      ENDER_DRAGON:
+        LosePercentage: 100
+        LoseMinPercentage: 1
+        LoseMaxPercentage: 5
+        Multi: 1
+        DeathMsgEnabled: false
+        DeathMsg: ""
+      ENDERMAN:
+        LosePercentage: 100
+        LoseMinPercentage: 1
+        LoseMaxPercentage: 5
+        Multi: 1
+        DeathMsgEnabled: false
+        DeathMsg: ""
+      GHAST:
+        LosePercentage: 100
+        LoseMinPercentage: 1
+        LoseMaxPercentage: 5
+        Multi: 1
+        DeathMsgEnabled: false
+        DeathMsg: ""
+      GIANT:
+        LosePercentage: 100
+        LoseMinPercentage: 1
+        LoseMaxPercentage: 5
+        Multi: 1
+        DeathMsgEnabled: false
+        DeathMsg: ""
+      HORSE:
+        LosePercentage: 100
+        LoseMinPercentage: 1
+        LoseMaxPercentage: 5
+        Multi: 1
+        DeathMsgEnabled: false
+        DeathMsg: ""
+      IRON_GOLEM:
+        LosePercentage: 100
+        LoseMinPercentage: 1
+        LoseMaxPercentage: 5
+        Multi: 1
+        DeathMsgEnabled: false
+        DeathMsg: ""
+      MAGMA_CUBE:
+        LosePercentage: 100
+        LoseMinPercentage: 1
+        LoseMaxPercentage: 5
+        Multi: 1
+        DeathMsgEnabled: false
+        DeathMsg: ""
+      MUSHROOM_COW:
+        LosePercentage: 100
+        LoseMinPercentage: 1
+        LoseMaxPercentage: 5
+        Multi: 1
+        DeathMsgEnabled: false
+        DeathMsg: ""
+      OCELOT:
+        LosePercentage: 100
+        LoseMinPercentage: 1
+        LoseMaxPercentage: 5
+        Multi: 1
+        DeathMsgEnabled: false
+        DeathMsg: ""
+      PIG:
+        LosePercentage: 100
+        LoseMinPercentage: 1
+        LoseMaxPercentage: 5
+        Multi: 1
+        DeathMsgEnabled: false
+        DeathMsg: ""
+      PIG_ZOMBIE:
+        LosePercentage: 100
+        LoseMinPercentage: 1
+        LoseMaxPercentage: 5
+        Multi: 1
+        DeathMsgEnabled: false
+        DeathMsg: ""
+      PLAYER: # Maybe some NPC plugins can use this o.o
+        LosePercentage: 100
+        LoseMinPercentage: 1
+        LoseMaxPercentage: 5
+        Multi: 1
+        DeathMsgEnabled: false
+        DeathMsg: ""
+      SHEEP:
+        LosePercentage: 100
+        LoseMinPercentage: 1
+        LoseMaxPercentage: 5
+        Multi: 1
+        DeathMsgEnabled: false
+        DeathMsg: ""
+      SILVERFISH:
+        LosePercentage: 100
+        LoseMinPercentage: 1
+        LoseMaxPercentage: 5
+        Multi: 1
+        DeathMsgEnabled: false
+        DeathMsg: ""
+      SKELETON:
+        LosePercentage: 100
+        LoseMinPercentage: 1
+        LoseMaxPercentage: 5
+        Multi: 1
+        DeathMsgEnabled: false
+        DeathMsg: ""
+      SLIME:
+        LosePercentage: 100
+        LoseMinPercentage: 1
+        LoseMaxPercentage: 5
+        Multi: 1
+        DeathMsgEnabled: false
+        DeathMsg: ""
+      SNOWMAN:
+        LosePercentage: 100
+        LoseMinPercentage: 1
+        LoseMaxPercentage: 5
+        Multi: 1
+        DeathMsgEnabled: false
+        DeathMsg: ""
+      SPIDER:
+        LosePercentage: 100
+        LoseMinPercentage: 1
+        LoseMaxPercentage: 5
+        Multi: 1
+        DeathMsgEnabled: false
+        DeathMsg: ""
+      SQUID:
+        LosePercentage: 100
+        LoseMinPercentage: 1
+        LoseMaxPercentage: 5
+        Multi: 1
+        DeathMsgEnabled: false
+        DeathMsg: ""
+      VILLAGER:
+        LosePercentage: 100
+        LoseMinPercentage: 1
+        LoseMaxPercentage: 5
+        Multi: 1
+        DeathMsgEnabled: false
+        DeathMsg: ""
+      WITCH:
+        LosePercentage: 100
+        LoseMinPercentage: 1
+        LoseMaxPercentage: 5
+        Multi: 1
+        DeathMsgEnabled: false
+        DeathMsg: ""
+      WITHER:
+        LosePercentage: 100
+        LoseMinPercentage: 1
+        LoseMaxPercentage: 5
+        Multi: 1
+        DeathMsgEnabled: false
+        DeathMsg: ""
+      WOLF:
+        LosePercentage: 100
+        LoseMinPercentage: 1
+        LoseMaxPercentage: 5
+        Multi: 1
+        DeathMsgEnabled: false
+        DeathMsg: ""
+      ZOMBIE:
+        LosePercentage: 100
+        LoseMinPercentage: 1
+        LoseMaxPercentage: 5
+        Multi: 1
+        DeathMsgEnabled: false
+        DeathMsg: ""
+    ENTITY_EXPLOSION:
+      LosePercentage: 100
+      LoseMinPercentage: 1
+      LoseMaxPercentage: 5
+      Multi: 1
+      DeathMsgEnabled: false
+      DeathMsg: ""
+    FALL:
+      LosePercentage: 100
+      LoseMinPercentage: 1
+      LoseMaxPercentage: 5
+      Multi: 1
+      DeathMsgEnabled: false
+      DeathMsg: ""
+    FALLING_BLOCK:
+      LosePercentage: 100
+      LoseMinPercentage: 1
+      LoseMaxPercentage: 5
+      Multi: 1
+      DeathMsgEnabled: false
+      DeathMsg: ""
+    FIRE:
+      LosePercentage: 100
+      LoseMinPercentage: 1
+      LoseMaxPercentage: 5
+      Multi: 1
+      DeathMsgEnabled: false
+      DeathMsg: ""
+    FIRE_TICK:
+      LosePercentage: 100
+      LoseMinPercentage: 1
+      LoseMaxPercentage: 5
+      Multi: 1
+      DeathMsgEnabled: false
+      DeathMsg: ""
+    LAVA:
+      LosePercentage: 100
+      LoseMinPercentage: 1
+      LoseMaxPercentage: 5
+      Multi: 1
+      DeathMsgEnabled: false
+      DeathMsg: ""
+    LIGHTNING:
+      LosePercentage: 100
+      LoseMinPercentage: 1
+      LoseMaxPercentage: 5
+      Multi: 1
+      DeathMsgEnabled: false
+      DeathMsg: ""
+    MAGIC:
+      LosePercentage: 100
+      LoseMinPercentage: 1
+      LoseMaxPercentage: 5
+      Multi: 1
+      DeathMsgEnabled: false
+      DeathMsg: ""
+    POISON:
+      LosePercentage: 100
+      LoseMinPercentage: 1
+      LoseMaxPercentage: 5
+      Multi: 1
+      DeathMsgEnabled: false
+      DeathMsg: ""
+    PROJECTILE:
+      LosePercentage: 100
+      LoseMinPercentage: 1
+      LoseMaxPercentage: 5
+      Multi: 1
+      DeathMsgEnabled: false
+      DeathMsg: ""
+    STARVATION:
+      LosePercentage: 100
+      LoseMinPercentage: 1
+      LoseMaxPercentage: 5
+      Multi: 1
+      DeathMsgEnabled: false
+      DeathMsg: ""
+    SUFFOCATION:
+      LosePercentage: 100
+      LoseMinPercentage: 1
+      LoseMaxPercentage: 5
+      Multi: 1
+      DeathMsgEnabled: false
+      DeathMsg: ""
+    SUICIDE:
+      LosePercentage: 100
+      LoseMinPercentage: 1
+      LoseMaxPercentage: 5
+      Multi: 1
+      DeathMsgEnabled: false
+      DeathMsg: ""
+    THORNS:
+      LosePercentage: 100
+      LoseMinPercentage: 1
+      LoseMaxPercentage: 5
+      Multi: 1
+      DeathMsgEnabled: false
+      DeathMsg: ""
+    VOID:
+      LosePercentage: 100
+      LoseMinPercentage: 1
+      LoseMaxPercentage: 5
+      Multi: 1
+      DeathMsgEnabled: false
+      DeathMsg: ""
+    PROJECTILE:
+      LosePercentage: 100
+      LoseMinPercentage: 1
+      LoseMaxPercentage: 5
+      Multi: 1
+      DeathMsgEnabled: false
+      DeathMsg: ""
+    WITHER:
+      LosePercentage: 100
+      LoseMinPercentage: 1
+      LoseMaxPercentage: 5
+      Multi: 1
+      DeathMsgEnabled: false
+      DeathMsg: ""
+    CUSTOM:
+      LosePercentage: 0
+      LoseMinPercentage: 0
+      LoseMaxPercentage: 1
+      Multi: 1
+      DeathMsgEnabled: false
+      DeathMsg: ""
 Messages:
 # Sorry for polish default language!
 # NoPermissions: '&4You don't have permissions to do that! You need: &9(&c{%Permission%}&9)'
