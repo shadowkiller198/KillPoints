@@ -21,7 +21,8 @@ public class Db {
 	private static boolean useMySQl = false;
 
 	private Db(String host, String db, String username, String password) {
-		url = "jdbc:mysql://" + host + "/" + db + "?user=" + username + "&password=" + password;
+		url = "jdbc:mysql://" + host + "/" + db + "?user=" + username
+				+ "&password=" + password;
 		driver = ("com.mysql.jdbc.Driver");
 	}
 
@@ -30,7 +31,8 @@ public class Db {
 		driver = ("org.sqlite.JDBC");
 	}
 
-	private Connection open(int type) throws SQLException, ClassNotFoundException {
+	private Connection open(int type) throws SQLException,
+			ClassNotFoundException {
 		Class.forName(driver);
 		con = DriverManager.getConnection(url);
 		return con;
@@ -43,6 +45,8 @@ public class Db {
 
 	private static void update(String sql) {
 		try {
+			if (st.isClosed())
+				st = con.createStatement();
 			st.executeUpdate(sql);
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -50,19 +54,23 @@ public class Db {
 	}
 
 	private static ResultSet query(String sql) throws SQLException {
+		if (st.isClosed())
+			st = con.createStatement();
 		return st.executeQuery(sql);
 	}
 
 	public static boolean connectToDatabase() {
 		try {
 			if (Cfg.isUseMySQL()) {
-				con = new Db(Cfg.getMySQLHost(), Cfg.getMySQLDb(), Cfg.getMySQLUser(), Cfg.getMySQLPass()).open(0);
+				con = new Db(Cfg.getMySQLHost(), Cfg.getMySQLDb(),
+						Cfg.getMySQLUser(), Cfg.getMySQLPass()).open(0);
 				st = con.createStatement();
 				update("CREATE TABLE IF NOT EXISTS bukkitsmerf (player VARCHAR(20), kills INT(7), deaths INT(7), kd DOUBLE, points BIGINT);");
 				useMySQl = true;
 				Utils.log("&a Connected to MySQL!");
 			} else {
-				con = new Db(KillPoints.getPluginDataFolder() + File.separator + "SQLite.db").open(0);
+				con = new Db(KillPoints.getPluginDataFolder() + File.separator
+						+ "SQLite.db").open(0);
 				st = con.createStatement();
 				update("CREATE TABLE IF NOT EXISTS bukkitsmerf (player, kills, deaths, kd, points);");
 				Utils.log("&a Connected to SQLite!");
@@ -70,20 +78,26 @@ public class Db {
 			return true;
 		} catch (ClassNotFoundException | SQLException e) {
 			e.printStackTrace();
-			Utils.warn("&4 Error when try connect to DataBase. &c(is MySQL: " + useMySQl + ")");
+			Utils.warn("&4 Error when try connect to DataBase. &c(is MySQL: "
+					+ useMySQl + ")");
 			return false;
 		}
 	}
 
 	public static void createPlayer(String player) {
-		update("INSERT INTO bukkitsmerf (player, kills, deaths, kd, points) VALUES ('" + player + "', 0, 0, 0, " + Cfg.getStartingPoints() + ");");
+		update("INSERT INTO bukkitsmerf (player, kills, deaths, kd, points) VALUES ('"
+				+ player + "', 0, 0, 0, " + Cfg.getStartingPoints() + ");");
 	}
 
 	public static LocalPlayer loadPlayer(String playerName) {
 		try {
-			ResultSet playerResult = query("SELECT * FROM bukkitsmerf WHERE player LIKE '" + playerName + "'");
+			ResultSet playerResult = query("SELECT * FROM bukkitsmerf WHERE player LIKE '"
+					+ playerName + "'");
 			if (playerResult.next()) {
-				return new LocalPlayer(playerName, playerResult.getInt("kills"), playerResult.getInt("deaths"), playerResult.getLong("points"));
+				return new LocalPlayer(playerName,
+						playerResult.getInt("kills"),
+						playerResult.getInt("deaths"),
+						playerResult.getLong("points"));
 			} else
 				return null;
 		} catch (SQLException e) {
@@ -99,17 +113,22 @@ public class Db {
 	}
 
 	public static void savePlayer(LocalPlayer player) {
-		update("UPDATE bukkitsmerf SET kills=" + player.kills + ", deaths=" + player.deaths + ", kd=" + player.getKD() + ", points=" + player.points + " WHERE player LIKE '" + player.playerName + "'");
+		update("UPDATE bukkitsmerf SET kills=" + player.kills + ", deaths="
+				+ player.deaths + ", kd=" + player.getKD() + ", points="
+				+ player.points + " WHERE player LIKE '" + player.playerName
+				+ "'");
 	}
 
 	public static boolean isPlayer(String playerName) {
 		try {
-			ResultSet result = query("SELECT player FROM bukkitsmerf WHERE player LIKE '" + playerName + "'");
+			ResultSet result = query("SELECT player FROM bukkitsmerf WHERE player LIKE '"
+					+ playerName + "'");
 			if (result.next())
 				return true;
 		} catch (SQLException e) {
 			e.printStackTrace();
-			Utils.warn("Error when try check if: " + playerName + " is in dataBase");
+			Utils.warn("Error when try check if: " + playerName
+					+ " is in dataBase");
 		}
 		return false;
 	}
@@ -133,7 +152,8 @@ public class Db {
 	private static List<LocalPlayer> getTop(String col, int from) {
 		try {
 			ArrayList<LocalPlayer> top = new ArrayList<LocalPlayer>();
-			ResultSet result = query("SELECT player FROM bukkitsmerf ORDER BY " + col + " " + "DESC LIMIT " + (from - 1) + ",10");
+			ResultSet result = query("SELECT player FROM bukkitsmerf ORDER BY "
+					+ col + " " + "DESC LIMIT " + (from - 1) + ",10");
 			ArrayList<String> players = new ArrayList<String>();
 			while (result.next())
 				players.add(result.getString("player"));
